@@ -9,48 +9,113 @@
     <meta name="base-url" content="{{ url('/') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link href="{{ asset('assets/css/iziToast.css') }}">
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
+    <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
+    <script src="https://maps.google.com/maps/api/js?key=AIzaSyDUPClCAvO-EIlmJajX4Sc3bpGgi57-LnE&libraries=places" type="text/javascript"></script>
+    <script src="https://maps.google.com/maps/api/js?key=AIzaSyDUPClCAvO-EIlmJajX4Sc3bpGgi57-LnE" type="text/javascript"></script>
+
 </head>
 <body>
-<input type="hidden" value="{{ url('/') }}" id="url">
-<div class="container mt-5">
-        <div class="row">
-            <div class="col-md-12 col-sm-12 col-12 m-auto">
-
-                <div class="col-lg-9">
-                    <div class="ltn__myaccount-tab-content-inner">
-                        {{-- // map show via firestore user get all map data --}}
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-lg-12">
-                                                <div class="ltn__map-area">
-                                                    <div class="ltn__map-inner">
-                                                        <div id="map" style="height: 500px;"></div>
-                                                        <div class="mt-5" id="directions_panel"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
+<div data-role="page" id="map_page">
+    <div data-role="header">
+        <h1><a href="#">jQuery mobile - Google maps directions service</h1>
+    </div>
+    <div data-role="content">
+        <div class="ui-bar-c ui-corner-all ui-shadow" style="padding:1em;">
+            <div id="map_canvas" style="height:300px;"></div>
+            <div data-role="fieldcontain">
+                <label for="from">From</label>
+                <input type="text" id="from" value="Mirpur-1, Dhaka, Bangladesh"/>
             </div>
+            <div data-role="fieldcontain">
+                <label for="to">To</label>
+                <input type="text" id="to" value="Banani, Dhaka, Bangladesh"/>
+            </div>
+            <div data-role="fieldcontain">
+                <label for="mode" class="select">Transportation method:</label>
+                <select name="select-choice-0" id="mode">
+                    <option value="DRIVING">Driving</option>
+                    <option value="WALKING">Walking</option>
+                    <option value="BICYCLING">Bicycling</option>
+                </select>
+            </div>
+            <a data-icon="search" data-role="button" href="#" id="submit">Get directions</a>
         </div>
-    <input type="text" hidden id="data_url" value="{{ $array }}">
+        <div id="results" style="display:none;">
+            <div id="directions"></div>
+        </div>
+    </div>
 </div>
-<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-<script src="https://maps.google.com/maps/api/js?key=AIzaSyDUPClCAvO-EIlmJajX4Sc3bpGgi57-LnE" type="text/javascript"></script>
-<script src="{{ asset('assets/js/googleMap.js') }}"></script>
+{{--<script src="{{ asset('assets/js/googleMap.js') }}"></script>--}}
+<script type="text/javascript">
+    $(document).on("pageinit", "#map_page", function() {
+        initialize();
+    });
 
+    $(document).on('click', '#submit', function(e) {
+        e.preventDefault();
+        calculateRoute();
+    });
+
+    var directionDisplay,
+        directionsService = new google.maps.DirectionsService(),
+        map;
+
+    function initialize()
+    {
+        directionsDisplay = new google.maps.DirectionsRenderer();
+        var mapCenter = new google.maps.LatLng(23.7956037, 90.4066082);
+
+        var myOptions = {
+            zoom:10,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            center: mapCenter
+        }
+
+        map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+        directionsDisplay.setMap(map);
+        directionsDisplay.setPanel(document.getElementById("directions"));
+    }
+
+    function calculateRoute()
+    {
+        var selectedMode = $("#mode").val(),
+            start = $("#from").val(),
+            end = $("#to").val();
+
+        if(start == '' || end == '')
+        {
+            // cannot calculate route
+            $("#results").hide();
+            return;
+        }
+        else
+        {
+            var request = {
+                origin:start,
+                destination:end,
+                travelMode: google.maps.DirectionsTravelMode[selectedMode]
+            };
+
+            directionsService.route(request, function(response, status) {
+                if (status == google.maps.DirectionsStatus.OK) {
+                    directionsDisplay.setDirections(response);
+                    $("#results").show();
+                    /*
+                        var myRoute = response.routes[0].legs[0];
+                        for (var i = 0; i < myRoute.steps.length; i++) {
+                            alert(myRoute.steps[i].instructions);
+                        }
+                    */
+                }
+                else {
+                    $("#results").hide();
+                }
+            });
+
+        }
+    }
+</script>
  </body>
 </html>
