@@ -19,25 +19,24 @@
 <body>
 <div data-role="page" id="map_page">
     <div data-role="header">
-        <h1><a href="#">jQuery mobile - Google maps directions service</h1>
+
     </div>
     <div data-role="content">
         <div class="ui-bar-c ui-corner-all ui-shadow" style="padding:1em;">
             <div id="map_canvas" style="height:300px;"></div>
             <div data-role="fieldcontain">
                 <label for="from">From</label>
-                <input type="text" id="from" value="Mirpur-1, Dhaka, Bangladesh"/>
+                <input type="text" id="from" value="{{ @$location->start_location }}"/>
             </div>
             <div data-role="fieldcontain">
                 <label for="to">To</label>
-                <input type="text" id="to" value="Banani, Dhaka, Bangladesh"/>
+                <input type="text" id="to" value="{{ @$location->end_location }}"/>
             </div>
             <div data-role="fieldcontain">
                 <label for="mode" class="select">Transportation method:</label>
                 <select name="select-choice-0" id="mode">
                     <option value="DRIVING">Driving</option>
                     <option value="WALKING">Walking</option>
-                    <option value="BICYCLING">Bicycling</option>
                 </select>
             </div>
             <a data-icon="search" data-role="button" href="#" id="submit">Get directions</a>
@@ -47,10 +46,11 @@
         </div>
     </div>
 </div>
-{{--<script src="{{ asset('assets/js/googleMap.js') }}"></script>--}}
+
 <script type="text/javascript">
     $(document).on("pageinit", "#map_page", function() {
         initialize();
+        calculateRoute();
     });
 
     $(document).on('click', '#submit', function(e) {
@@ -64,8 +64,10 @@
 
     function initialize()
     {
+        var lat = "{{ @$location->start_latitude }}";
+        var long = "{{ @$location->end_longitude }}";
         directionsDisplay = new google.maps.DirectionsRenderer();
-        var mapCenter = new google.maps.LatLng(23.7956037, 90.4066082);
+        var mapCenter = new google.maps.LatLng(lat,long);
 
         var myOptions = {
             zoom:10,

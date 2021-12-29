@@ -15,6 +15,7 @@ class CreateGeoLocationsTable extends Migration
     {
         Schema::create('geo_locations', function (Blueprint $table) {
             $table->id();
+            $table->string('route_name')->comment('Preferable route name')->nullable();
             $table->string('start_location')->comment('Start location')->nullable();
             $table->string('end_location')->comment('End location')->nullable();
             $table->double('distance', 10, 2)->comment('in km')->nullable();

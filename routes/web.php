@@ -18,5 +18,5 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('map-route-view',[GoogleMapDataController::class,'mapRouteView'])->name('map.view');
+Route::get('map-route-view/{id}',[GoogleMapDataController::class,'mapRouteView'])->name('map.view');
 Route::post('map-data-store',[GoogleMapDataController::class,'store'])->name('map.store');
