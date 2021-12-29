@@ -13,7 +13,9 @@ class GoogleMapDataController extends Controller
     {
         $location = GeoLocation::where('id', $routeId)->first();
 
-        return view('map_view', compact('location'));
+        $route_data = GeoLocation::all();
+
+        return view('map_view', compact('location','route_data'));
     }
 
     public function store(Request $request)

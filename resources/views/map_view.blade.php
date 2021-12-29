@@ -9,17 +9,29 @@
     <meta name="base-url" content="{{ url('/') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css"/>
     <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
     <script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
-    <script src="https://maps.google.com/maps/api/js?key=AIzaSyDUPClCAvO-EIlmJajX4Sc3bpGgi57-LnE&libraries=places" type="text/javascript"></script>
-    <script src="https://maps.google.com/maps/api/js?key=AIzaSyDUPClCAvO-EIlmJajX4Sc3bpGgi57-LnE" type="text/javascript"></script>
+    <script src="https://maps.google.com/maps/api/js?key=AIzaSyDUPClCAvO-EIlmJajX4Sc3bpGgi57-LnE&libraries=places"
+            type="text/javascript"></script>
+    <script src="https://maps.google.com/maps/api/js?key=AIzaSyDUPClCAvO-EIlmJajX4Sc3bpGgi57-LnE"
+            type="text/javascript"></script>
 
 </head>
 <body>
 <div data-role="page" id="map_page">
     <div data-role="header">
 
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-sm-6 col-6 m-auto">
+            <label for="route_name">Route name</label>
+            <select class="form-control" name="route_name" id="route_name">
+                <option value="" disabled selected> Select location</option>
+                @foreach($route_data as $item)
+                    <option value="{{ $item->id }}}"> {{$item->route_name }}</option>@endforeach
+            </select>
+        </div>
     </div>
     <div data-role="content">
         <div class="ui-bar-c ui-corner-all ui-shadow" style="padding:1em;">
@@ -48,12 +60,12 @@
 </div>
 
 <script type="text/javascript">
-    $(document).on("pageinit", "#map_page", function() {
+    $(document).on("pageinit", "#map_page", function () {
         initialize();
         calculateRoute();
     });
 
-    $(document).on('click', '#submit', function(e) {
+    $(document).on('click', '#submit', function (e) {
         e.preventDefault();
         calculateRoute();
     });
@@ -62,15 +74,14 @@
         directionsService = new google.maps.DirectionsService(),
         map;
 
-    function initialize()
-    {
+    function initialize() {
         var lat = "{{ @$location->start_latitude }}";
         var long = "{{ @$location->end_longitude }}";
         directionsDisplay = new google.maps.DirectionsRenderer();
-        var mapCenter = new google.maps.LatLng(lat,long);
+        var mapCenter = new google.maps.LatLng(lat, long);
 
         var myOptions = {
-            zoom:10,
+            zoom: 10,
             mapTypeId: google.maps.MapTypeId.ROADMAP,
             center: mapCenter
         }
@@ -80,27 +91,23 @@
         directionsDisplay.setPanel(document.getElementById("directions"));
     }
 
-    function calculateRoute()
-    {
+    function calculateRoute() {
         var selectedMode = $("#mode").val(),
             start = $("#from").val(),
             end = $("#to").val();
 
-        if(start == '' || end == '')
-        {
+        if (start == '' || end == '') {
             // cannot calculate route
             $("#results").hide();
             return;
-        }
-        else
-        {
+        } else {
             var request = {
-                origin:start,
-                destination:end,
+                origin: start,
+                destination: end,
                 travelMode: google.maps.DirectionsTravelMode[selectedMode]
             };
 
-            directionsService.route(request, function(response, status) {
+            directionsService.route(request, function (response, status) {
                 if (status == google.maps.DirectionsStatus.OK) {
                     directionsDisplay.setDirections(response);
                     $("#results").show();
@@ -110,8 +117,7 @@
                             alert(myRoute.steps[i].instructions);
                         }
                     */
-                }
-                else {
+                } else {
                     $("#results").hide();
                 }
             });
@@ -119,5 +125,5 @@
         }
     }
 </script>
- </body>
+</body>
 </html>
