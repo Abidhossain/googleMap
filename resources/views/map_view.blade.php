@@ -26,11 +26,11 @@
             <div id="map_canvas" style="height:300px;"></div>
             <div data-role="fieldcontain">
                 <label for="from">From</label>
-                <input type="text" id="from" value="Mirpur-1, Dhaka, Bangladesh"/>
+                <input type="text" id="from" value="Farmgate, Dhaka, Bangladesh"/>
             </div>
             <div data-role="fieldcontain">
                 <label for="to">To</label>
-                <input type="text" id="to" value="Banani, Dhaka, Bangladesh"/>
+                <input type="text" id="to" value="Shahbagh Bus Stop, Shahbagh Road, Dhaka, Bangladesh"/>
             </div>
             <div data-role="fieldcontain">
                 <label for="mode" class="select">Transportation method:</label>
@@ -65,7 +65,7 @@
     function initialize()
     {
         directionsDisplay = new google.maps.DirectionsRenderer();
-        var mapCenter = new google.maps.LatLng(23.7956037, 90.4066082);
+        var mapCenter = new google.maps.LatLng(23.7561067, 23.7392481);
 
         var myOptions = {
             zoom:10,
