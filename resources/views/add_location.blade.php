@@ -4,10 +4,16 @@
     
 @endsection
 @section('content')
-  <div class="container mt-5">
+<div class="container mt-5">
     <form action="{{ route('map.store') }}" method="post">
         @csrf
         <div class="row">
+            <div class="col-md-12 col-sm-12 col-12 m-auto">
+                <div class="form-group" id="lat_area">
+                    <label for="route_name"> Route name </label>
+                    <input type="text" name="route_name" id="route_name" class="form-control" placeholder="Route name" required>
+                </div>
+            </div>
             <div class="col-xl-6 col-lg-6 col-md-8 col-sm-12 col-12 m-auto">
                 <div class="card shadow">
                     <div class="card-header bg-primary">
@@ -19,11 +25,11 @@
                             <input type="text" name="start_location" id="start_autocomplete" class="form-control"
                                    placeholder="Select Location" required>
                         </div>
-                        <div class="form-group" id="lat_area">
+                        <div class="form-group d-none" id="lat_area">
                             <label for="start_latitude"> Latitude </label>
                             <input type="text" name="start_latitude" id="start_latitude" class="form-control" readonly>
                         </div>
-                        <div class="form-group" id="long_area">
+                        <div class="form-group d-none" id="long_area">
                             <label for="start_longitude"> Longitude </label>
                             <input type="text" name="start_longitude" id="start_longitude" class="form-control"
                                    readonly>
@@ -42,11 +48,11 @@
                             <input type="text" name="end_location" id="end_autocomplete" class="form-control"
                                    placeholder="Select Location" required>
                         </div>
-                        <div class="form-group" id="end_lat_area">
+                        <div class="form-group d-none" id="end_lat_area">
                             <label for="end_latitude"> Latitude </label>
                             <input type="text" name="end_latitude" id="end_latitude" class="form-control" readonly>
                         </div>
-                        <div class="form-group" id="end_long_area">
+                        <div class="form-group d-none" id="end_long_area">
                             <label for="end_longitude"> Longitude </label>
                             <input type="text" name="end_longitude" id="end_longitude" class="form-control" readonly>
                         </div>
