@@ -9,23 +9,17 @@ use Illuminate\Http\Request;
 
 class GoogleMapDataController extends Controller
 {
-    public function mapRouteView()
+    public function addMapLocation(){
+
+        return view('add_location');
+    }
+    public function mapRouteView($routeId = null)
     {
-        $location = GeoLocation::where('id', 2)->first();
-        $start['latitude'] = $location->start_latitude;
-        $start['longitude'] = $location->start_longitude;
+        $location = GeoLocation::where('id', $routeId)->first();
 
-        $end['latitude'] = $location->end_latitude;
-        $end['longitude'] = $location->end_longitude;
+        $route_data = GeoLocation::all();
 
-        $collection = array_map(function ($start, $end) {
-            return [
-                'latitude' => $start,
-                'longitude' => $end,
-            ];
-        }, $start, $end);
-        $array = json_encode($collection);
-        return view('map_view',compact('array'));
+        return view('map_view', compact('location','route_data'));
     }
 
     public function store(Request $request)
@@ -33,9 +27,9 @@ class GoogleMapDataController extends Controller
         try {
             $distance = $this->measureDistance($request);
             $request['distance'] = $distance;
-            GeoLocation::create($request->all());
+            $location = GeoLocation::create($request->all());
 
-            return redirect()->back()->with('success', 'Geo location saved successfully');
+            return redirect()->route('map.view', $location->id);
         } catch (\Exception $exception) {
             return redirect()->back();
         }

@@ -10,6 +10,6 @@ class GeoLocation extends Model
     use HasFactory;
 
     protected $fillable = [
-        'start_location', 'end_location', 'distance', 'start_latitude', 'start_longitude', 'end_latitude', 'end_longitude'
+        'route_name', 'start_location', 'end_location', 'distance', 'start_latitude', 'start_longitude', 'end_latitude', 'end_longitude'
     ];
 }

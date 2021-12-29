@@ -15,8 +15,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('master');
 });
 
-Route::get('map-route-view',[GoogleMapDataController::class,'mapRouteView'])->name('map.view');
+Route::get('map-route-view/{id}',[GoogleMapDataController::class,'mapRouteView'])->name('map.view');
+Route::get('add-map-location',[GoogleMapDataController::class,'addMapLocation'])->name('add-map-location');
 Route::post('map-data-store',[GoogleMapDataController::class,'store'])->name('map.store');
